@@ -1,0 +1,373 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="herb_base">
+  <xacro:macro name="herb_base" params="prefix">
+    <link name="base_footprint">
+      <inertial>
+        <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+        <mass
+            value="0.1" />
+        <inertia
+            ixx="1"
+            ixy="0"
+            ixz="0"
+            iyy="1"
+            iyz="0"
+            izz="1" />
+      </inertial>
+    </link>
+    <link
+        name="herb_frame">
+      <!--check inertias and mass-->
+      <inertial>
+        <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+        <mass
+            value="106.25" />
+        <inertia
+            ixx="22.3955"
+            ixy="-0.2746"
+            ixz="-0.0999"
+            iyy="5.9126"
+            iyz="5.1995"
+            izz="20.4410" />
+      </inertial>
+      <visual>
+        <origin
+            xyz="0 0 0"
+            rpy="1.57075 0 3.141592" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/base/herb_frame.STL" />
+        </geometry>
+        <material
+            name="">
+          <color
+              rgba="0.3 0 0 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+            xyz="0 0 0"
+            rpy="1.57075 0 -1.57075" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/base/herb_frame_collision.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+        name="root_to_frame"
+        type="fixed">
+      <origin
+          xyz="0 0 1.05"
+          rpy="0 0 -1.57075" />
+      <parent
+          link="base_footprint" />
+      <child
+          link="herb_frame" />
+    </joint>
+    <link
+        name="neobotix_base">
+      <!--check inertias and mass-->
+      <inertial>
+        <origin
+            xyz="0 -0.074086 -1.101244"
+            rpy="0 0 0" />
+        <mass
+            value="80" />
+        <inertia
+            ixx="9.25557"
+            ixy="0.00548"
+            ixz="0.00573"
+            iyy="7.60171"
+            iyz="1.02901"
+            izz="9.76036" />
+      </inertial>
+      <visual>
+        <origin
+            xyz="0 0 0"
+            rpy="0 0 0"/>
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/base/herb_neobotix_base.STL" />
+        </geometry>
+        <material
+            name="">
+          <color
+              rgba="0.3 0.3 0.3 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+            xyz="0 0 0"
+            rpy="1.57075 0 1.57075" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/base/herb_neobotix_base_collision.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+        name="frame_to_base"
+        type="fixed">
+      <origin
+          xyz="0 -0.074086 -1.101244"
+          rpy="0 0 3.141592" />
+      <parent
+          link="herb_frame" />
+      <child
+          link="neobotix_base" />
+    </joint>
+    <link
+        name="neck_pan">
+      <!--check inertias and mass-->
+      <inertial>
+        <origin
+            xyz="0 0.124900 0.050806"
+            rpy="0 0 0" />
+        <mass
+            value="0.81" />
+        <inertia
+            ixx="0.00694"
+            ixy="0"
+            ixz="0"
+            iyy="0.00713"
+            iyz="0"
+            izz="0.00081" />
+      </inertial>
+      <visual>
+        <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/head/herb_neck_pan.STL" />
+        </geometry>
+        <material
+            name="">
+          <color
+              rgba="0.5 0.5 0.5 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+            xyz="0 0 0"
+            rpy="-1.57075 0 0" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/head/herb_neck_pan_collision.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+        name="frame_to_neck_pan"
+        type="fixed">
+      <axis
+          xyz="0 0 1" />
+      <!--velocity dimensions assumed to be rad/s-->
+      <limit
+          effort="2.0"
+          lower="-1.57075"
+          upper="1.57075"
+          velocity="6.28319" />
+      <origin
+          xyz="0 0.124900 0.050806"
+          rpy="3.141592 0 0" />
+      <parent
+          link="herb_frame" />
+      <child
+          link="neck_pan" />
+    </joint>
+    <link
+        name="neck_tilt" >
+      <inertial>
+        <origin
+            xyz="0 0.124900 0.142633"
+            rpy="0 0 0" />
+        <mass
+            value="0.32" />
+        <inertia
+            ixx="0.00046"
+            ixy="0"
+            ixz="-0.00002"
+            iyy="0.00142"
+            iyz="0"
+            izz="0.00120" />
+      </inertial>
+      <visual>
+        <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/head/herb_neck_tilt.STL" />
+        </geometry>
+        <material
+            name="">
+          <color
+              rgba="0.5 0.5 0.5 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+            xyz="0 0 0"
+            rpy="-1.57075 0 3.141592" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/head/herb_neck_tilt_collision.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+        name="pan_neck_to_tilt_neck"
+        type="fixed">
+      <axis
+          xyz="1 0 0" />
+      <!--velocity dimensions assumed to be rad/s-->
+      <limit
+          effort="12.0"
+          lower="-1.57075"
+          upper="1.57075"
+          velocity="4.18879" />
+      <origin
+          xyz="0 0 -0.0919"
+          rpy="-0.698132 0 0" />
+      <parent
+          link="neck_pan" />
+      <child
+          link="neck_tilt" />
+    </joint>
+    <link
+        name="crl_head">
+      <!--check inertias and mass-->
+      <inertial>
+        <origin
+            xyz="0.001 0.181699 0.377811"
+            rpy="0 0 0" />
+        <mass
+            value="3.01" />
+        <inertia
+            ixx="0.02735"
+            ixy="-0.00053"
+            ixz="0.00024"
+            iyy="0.00962"
+            iyz="-0.00521"
+            izz="0.02487" />
+      </inertial>
+      <visual>
+        <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/head/herb_crl_head.STL" />
+        </geometry>
+        <material
+            name="">
+          <color
+              rgba="0 0 0 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+            xyz="-0.003895 -0.236 0.0575"
+            rpy="0 3.141592 0" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/head/herb_crl_head_collision.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+        name="tilt_neck_to_crl_head"
+        type="fixed">
+      <parent
+          link="neck_tilt" />
+      <child
+          link="crl_head" />
+      <origin
+          xyz="-0.003895 -0.0575 -0.236"
+          rpy="-1.57075 0 0" />
+    </joint>
+    <link name="multisense/head">
+      <inertial>
+        <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+        <mass
+            value="0.1" />
+        <inertia
+            ixx="1"
+            ixy="0"
+            ixz="0"
+            iyy="1"
+            iyz="0"
+            izz="1" />
+      </inertial>
+    </link>
+    <joint
+        name="crl_head_to_multisenseframe"
+        type="fixed">
+      <parent
+          link="crl_head" />
+      <child
+          link="multisense/head" />
+      <origin
+          xyz="0 -0.086 -0.056"
+          rpy="0 1.5707 1.5707" />
+    </joint>
+    <link
+        name="head/kinect2_link">
+      <inertial>
+        <origin
+            xyz="0.001778 0.164443 0.209049"
+            rpy="0 0 0" />
+        <mass
+            value="0.63"/>
+        <inertia
+            ixx="0.00272"
+            ixy="0.00036"
+            ixz="-0.00002"
+            iyy="0.00258"
+            iyz="-0.00001"
+            izz="0.00145" />
+      </inertial>
+      <visual>
+        <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/head/herb_kinect.STL" />
+        </geometry>
+        <material
+            name="">
+          <color
+              rgba="0 0 0 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+            xyz="-0.039543 -0.065 0"
+            rpy="1.57075 1.57075 1.57075" />
+        <geometry>
+          <mesh
+              filename="package://herb_description/meshes/head/herb_kinect_collision.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+        name="crl_head_to_kinect"
+        type="fixed">
+      <parent
+          link="crl_head" />
+      <child
+          link="head/kinect2_link" />
+      <origin
+          xyz="-0.003895 -0.170163 0.017938"
+          rpy="0 1.57075 0" />
+    </joint>
+  </xacro:macro>
+</robot>

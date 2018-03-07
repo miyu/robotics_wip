@@ -1,0 +1,6 @@
+build/
+ordata/
+robots/herb.urdf
+robots/herb.srdf
+robots/bh280.urdf
+robots/wam.urdf

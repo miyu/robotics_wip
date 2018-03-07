@@ -1,0 +1,222 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="herb">
+
+  <xacro:macro name="wam_manipulator" params="prefix">
+    <group name="${prefix}">
+      <chain base_link="/${prefix}/wam_base" tip_link="/${prefix}/wam7"/>
+    </group>
+
+    <!-- WAM self collisions -->
+    <disable_collisions link1="herb_frame" link2="/${prefix}/wam1"/>
+    <disable_collisions link1="/${prefix}/wam1" link2="/${prefix}/wam3"/>
+    <disable_collisions link1="/${prefix}/wam4" link2="/${prefix}/wam6"/>
+    <disable_collisions link1="/${prefix}/wam4" link2="/${prefix}/wam7"/>
+    <disable_collisions link1="/${prefix}/wam5" link2="/${prefix}/wam7"/>
+
+    <!-- Sphere representation for CHOMP -->
+    <link_sphere_approximation link="/${prefix}/wam_base">
+      <sphere center="0.0 0.0 0.0" radius="0.15"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/wam1">
+      <sphere center="0 0 0" radius="0"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/wam2">
+      <sphere center="0.0 -0.2 0.0" radius="0.06"/>
+      <sphere center="0.0 -0.3 0.0" radius="0.06"/>
+      <sphere center="0.0 -0.4 0.0" radius="0.06"/>
+      <sphere center="0.0 -0.5 0.0" radius="0.06"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/wam3">
+      <sphere center=" 0.045 0.0 0.55" radius="0.06"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/wam4">
+      <sphere center="-0.045 -0.2  0.0" radius="0.06"/>
+      <sphere center="-0.045 -0.1  0.0" radius="0.06"/>
+      <sphere center="-0.045 -0.3  0.0" radius="0.06"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/wam5">
+      <sphere center="0 0 0" radius="0"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/wam6">
+      <sphere center="0.0 -0.1 0.0" radius="0.06"/>
+    </link_sphere_approximation>
+
+    <!-- FIXME: Shouldn't wam7 have a sphere? -->
+    <link_sphere_approximation link="/${prefix}/wam7">
+      <sphere center="0 0 0" radius="0"/>
+    </link_sphere_approximation>
+
+  </xacro:macro>
+
+  <xacro:macro name="empty_endeffector" params="prefix:=${prefix}">
+    <group name="${prefix}_hand"/>
+    <end_effector name="${prefix}" group="${prefix}_hand"
+                  parent_link="/${prefix}/wam7" parent_group="${prefix}"/>
+  </xacro:macro>
+
+  <xacro:macro name="barretthand_endeffector" params="prefix:=${prefix} perception:=false">
+    <!-- Must be included AFTER wam_manipulator -->
+    <group name="${prefix}_hand">
+      <link name="/${prefix}/hand_base"/>
+      <link name="/${prefix}/finger0_0"/>
+      <link name="/${prefix}/finger0_1"/>
+      <link name="/${prefix}/finger0_2"/>
+      <link name="/${prefix}/finger1_0"/>
+      <link name="/${prefix}/finger1_1"/>
+      <link name="/${prefix}/finger1_2"/>
+      <link name="/${prefix}/finger2_1"/>
+      <link name="/${prefix}/finger2_2"/>
+      <xacro:if value="${perception}">
+        <link name="/${prefix}/perception_palm"/>
+      </xacro:if>
+    </group>
+
+    <end_effector name="${prefix}" group="${prefix}_hand"
+                  parent_link="/${prefix}/wam7" parent_group="${prefix}"/>
+
+    <!-- Disable collisions between the fingers. -->
+    <disable_collisions link1="/${prefix}/finger0_0" link2="/${prefix}/finger1_0"/>
+    <disable_collisions link1="/${prefix}/finger0_0" link2="/${prefix}/finger0_1"/>
+    <disable_collisions link1="/${prefix}/finger0_0" link2="/${prefix}/finger0_2"/>
+    <disable_collisions link1="/${prefix}/finger0_0" link2="/${prefix}/finger1_1"/>
+    <disable_collisions link1="/${prefix}/finger0_0" link2="/${prefix}/finger1_2"/>
+    <disable_collisions link1="/${prefix}/finger0_0" link2="/${prefix}/finger2_1"/>
+    <disable_collisions link1="/${prefix}/finger0_0" link2="/${prefix}/finger2_2"/>
+
+    <disable_collisions link1="/${prefix}/finger1_0" link2="/${prefix}/finger0_1"/>
+    <disable_collisions link1="/${prefix}/finger1_0" link2="/${prefix}/finger0_2"/>
+    <disable_collisions link1="/${prefix}/finger1_0" link2="/${prefix}/finger1_1"/>
+    <disable_collisions link1="/${prefix}/finger1_0" link2="/${prefix}/finger1_2"/>
+    <disable_collisions link1="/${prefix}/finger1_0" link2="/${prefix}/finger2_1"/>
+    <disable_collisions link1="/${prefix}/finger1_0" link2="/${prefix}/finger2_2"/>
+
+    <disable_collisions link1="/${prefix}/finger0_1" link2="/${prefix}/finger0_2"/>
+    <disable_collisions link1="/${prefix}/finger0_1" link2="/${prefix}/finger1_1"/>
+    <disable_collisions link1="/${prefix}/finger0_1" link2="/${prefix}/finger1_2"/>
+    <disable_collisions link1="/${prefix}/finger0_1" link2="/${prefix}/finger2_1"/>
+    <disable_collisions link1="/${prefix}/finger0_1" link2="/${prefix}/finger2_2"/>
+
+    <disable_collisions link1="/${prefix}/finger0_2" link2="/${prefix}/finger1_1"/>
+    <disable_collisions link1="/${prefix}/finger0_2" link2="/${prefix}/finger1_2"/>
+    <disable_collisions link1="/${prefix}/finger0_2" link2="/${prefix}/finger2_1"/>
+    <disable_collisions link1="/${prefix}/finger0_2" link2="/${prefix}/finger2_2"/>
+
+    <disable_collisions link1="/${prefix}/finger1_1" link2="/${prefix}/finger1_2"/>
+    <disable_collisions link1="/${prefix}/finger1_1" link2="/${prefix}/finger2_1"/>
+    <disable_collisions link1="/${prefix}/finger1_1" link2="/${prefix}/finger2_2"/>
+
+    <disable_collisions link1="/${prefix}/finger1_2" link2="/${prefix}/finger2_1"/>
+    <disable_collisions link1="/${prefix}/finger1_2" link2="/${prefix}/finger2_2"/>
+    <disable_collisions link1="/${prefix}/finger2_1" link2="/${prefix}/finger2_2"/>
+
+    <!-- Disable collisions between the fingers and the hand base. -->
+    <disable_collisions link1="/${prefix}/hand_base" link2="/${prefix}/finger1_0"/>
+    <disable_collisions link1="/${prefix}/hand_base" link2="/${prefix}/finger0_1"/>
+    <disable_collisions link1="/${prefix}/hand_base" link2="/${prefix}/finger0_2"/>
+    <disable_collisions link1="/${prefix}/hand_base" link2="/${prefix}/finger1_1"/>
+    <disable_collisions link1="/${prefix}/hand_base" link2="/${prefix}/finger1_2"/>
+    <disable_collisions link1="/${prefix}/hand_base" link2="/${prefix}/finger2_1"/>
+    <disable_collisions link1="/${prefix}/hand_base" link2="/${prefix}/finger2_2"/>
+
+    <xacro:if value="${perception}">
+      <!-- Disable collisions between the fingers and the perception palm. -->
+      <disable_collisions link1="/${prefix}/hand_base" link2="/${prefix}/perception_palm"/>
+      <disable_collisions link1="/${prefix}/perception_palm" link2="/${prefix}/finger1_0"/>
+      <disable_collisions link1="/${prefix}/perception_palm" link2="/${prefix}/finger0_1"/>
+      <disable_collisions link1="/${prefix}/perception_palm" link2="/${prefix}/finger0_2"/>
+      <disable_collisions link1="/${prefix}/perception_palm" link2="/${prefix}/finger1_1"/>
+      <disable_collisions link1="/${prefix}/perception_palm" link2="/${prefix}/finger1_2"/>
+      <disable_collisions link1="/${prefix}/perception_palm" link2="/${prefix}/finger2_1"/>
+      <disable_collisions link1="/${prefix}/perception_palm" link2="/${prefix}/finger2_2"/>
+    </xacro:if>
+
+    <!-- Disable collisions between palm and WAM end link -->
+    <disable_collisions link1="/${prefix}/wam6" link2="/${prefix}/hand_base"/>
+    <disable_collisions link1="/${prefix}/wam7" link2="/${prefix}/hand_base"/>
+
+    <!-- Sphere representation for CHOMP -->
+    <link_sphere_approximation link="/${prefix}/finger0_1">
+      <sphere center="0.05 -0.01 0.0" radius="0.04"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/finger1_1">
+      <sphere center="0.05 -0.01 0.0" radius="0.04"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/finger2_1">
+      <sphere center="0.05 -0.01 0.0" radius="0.04"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/finger0_2">
+      <sphere center="0.05 0.0 0.0" radius="0.04"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/finger1_2">
+      <sphere center="0.05 0.0 0.0" radius="0.04"/>
+    </link_sphere_approximation>
+
+    <link_sphere_approximation link="/${prefix}/finger2_2">
+      <sphere center="0.05 0.0 0.0" radius="0.04"/>
+    </link_sphere_approximation>
+  </xacro:macro>
+
+  <!-- <xacro:macro name="pantilt" params="name"> -->
+  <!--   <group name="${name}"> -->
+  <!--     <link name="/herb_base"/> -->
+  <!--     <link name="/${name}/wam1"/> -->
+  <!--     <link name="/${name}/wam2"/> -->
+
+  <!--     <link_sphere_approximation link="/${name}/wam1"> -->
+  <!--       <sphere center="0 0 0" radius="0.20"/> -->
+  <!--     </link_sphere_approximation> -->
+
+  <!--     <link_sphere_approximation link="/${name}/wam2"> -->
+  <!--       <sphere center="0 0 0" radius="0"/> -->
+  <!--     </link_sphere_approximation> -->
+  <!--   </group> -->
+
+  <!--   <!-\- Dummy group to make the head look like an end-effector; e.g. to -->
+  <!--        run inverse kinematics. HERB doesn't actually have a gripper on -->
+  <!--        his head (maybe on HERB3?). -\-> -->
+  <!--   <group name="${name}_hand"/> -->
+
+  <!--   <end_effector name="head" group="${name}_hand" -->
+  <!--                 parent_link="/${name}/wam2" parent_group="${name}"/> -->
+  <!-- </xacro:macro> -->
+
+  <!-- hand arguments should all default to false to make argument passing sane -->
+  <!-- NOTE: if we use kinematically distinct hands from the BarrettHand
+       we will need more fine-grained arguments -->
+  <xacro:arg name="left_hand" default="false"/>
+  <xacro:arg name="right_hand" default="false"/>
+  <xacro:arg name="left_perception" default="false"/>
+  <xacro:arg name="right_perception" default="false"/>
+
+  <xacro:wam_manipulator prefix="left"/>
+  <xacro:wam_manipulator prefix="right"/>
+
+  <xacro:if value="$(arg left_hand)">
+    <xacro:barretthand_endeffector prefix="left" perception="$(arg left_perception)"/>
+  </xacro:if>
+  <xacro:unless value="$(arg left_hand)">
+    <xacro:empty_endeffector prefix="left"/>
+  </xacro:unless>
+
+  <xacro:if value="$(arg right_hand)">
+    <xacro:barretthand_endeffector prefix="right" perception="$(arg right_perception)"/>
+  </xacro:if>
+  <xacro:unless value="$(arg right_hand)">
+    <xacro:empty_endeffector prefix="right"/>
+  </xacro:unless>
+
+  <!-- <xacro:pantilt name="head"/> -->
+
+  <disable_collisions link1="/left/wam_base" link2="/right/wam_base"/>
+  <disable_collisions link1="/left/wam1" link2="/right/wam1"/>
+  <!-- <disable_collisions link1="/herb_base" link2="/head/wam2" /> -->
+</robot>
